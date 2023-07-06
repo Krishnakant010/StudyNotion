@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 const mailSender = require("../utils/mailSender");
 require("dotenv").config();
 // Send Otp
+
+//-------
 exports.sendOTP = async (req, res) => {
   try {
     const { email } = req.body;
@@ -57,7 +59,8 @@ exports.sendOTP = async (req, res) => {
   }
 };
 // signup
-
+// _________--------
+//---------
 exports.signUp = async (req, res) => {
   try {
     // /data from raq body
@@ -153,7 +156,8 @@ exports.signUp = async (req, res) => {
     });
   }
 };
-
+// ----------------------------------------------------------------
+//
 // Login
 exports.login = async (req, res) => {
   try {
@@ -215,6 +219,8 @@ exports.login = async (req, res) => {
     });
   }
 };
+// -----------
+//----------------------------------------------------------------
 // Change Password
 exports.changePassword = async (req, res) => {
   console.log(req.body);
