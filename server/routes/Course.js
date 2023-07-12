@@ -7,7 +7,7 @@ const router = express.Router();
 // Course Controllers Import
 const {
   createCourse,
-  getAllCourses,
+  showAllCourses,
   getCourseDetails,
 } = require("../controllers/Course");
 
@@ -27,7 +27,7 @@ const {
 
 // Sub-Sections Controllers Import
 const {
-  createSubSection,
+  createSubsection,
   updateSubSection,
   deleteSubSection,
 } = require("../controllers/Subsection");
@@ -64,9 +64,9 @@ router.post("/updateSubSection", auth, isInstructor, updateSubSection);
 // Delete Sub Section
 router.post("/deleteSubSection", auth, isInstructor, deleteSubSection);
 // Add a Sub Section to a Section
-router.post("/addSubSection", auth, isInstructor, createSubSection);
+router.post("/addSubSection", auth, isInstructor, createSubsection);
 // Get all Registered Courses
-router.get("/getAllCourses", getAllCourses);
+router.get("/getAllCourses", showAllCourses);
 // Get Details for a Specific Courses
 router.post("/getCourseDetails", getCourseDetails);
 
@@ -75,15 +75,15 @@ router.post("/getCourseDetails", getCourseDetails);
 // ********************************************************************************************************
 // Category can Only be Created by Admin
 
-router.post("/createCategory", auth, isAdmin, createCategory);
-router.get("/showAllCategories", showAllCategories);
-router.post("/getCategoryPageDetails", categoryPageDetails);
+// router.post("/createCategory", auth, isAdmin, createCategory);
+// router.get("/showAllCategories", showAllCategories);
+// router.post("/getCategoryPageDetails", categoryPageDetails);
 
-// ********************************************************************************************************
-//                                      Rating and Review
-// ********************************************************************************************************
-router.post("/createRating", auth, isStudent, createRating);
-router.get("/getAverageRating", getAverageRating);
-router.get("/getReviews", getAllRating);
+// // ********************************************************************************************************
+// //                                      Rating and Review
+// // ********************************************************************************************************
+// router.post("/createRating", auth, isStudent, createRating);
+// router.get("/getAverageRating", getAverageRating);
+// router.get("/getReviews", getAllRating);
 
 module.exports = router;

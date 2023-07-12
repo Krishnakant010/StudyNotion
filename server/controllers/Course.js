@@ -1,5 +1,5 @@
 const Course = require("../models/Course");
-const Categoy = require("../models/Categoy");
+const Categoy = require("../models/Category");
 const User = require("../models/User");
 const {
   uploadImage,

@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
   },
   courses: [
     {
-      type: Strmongoose.Schema.Types.ObjectIding,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
     },
   ],
@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema({
   },
   courseProgress: [
     {
-      type: Strmongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "CourseProgress",
     },
   ],
