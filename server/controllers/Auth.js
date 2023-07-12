@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const OTP = require("../models/OTP");
+const Profile = require("../models/Profile");
 const bcrypt = require("bcrypt");
 const otpGenerator = require("otp-generator");
 const jwt = require("jsonwebtoken");
@@ -49,6 +50,7 @@ exports.sendotp = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "OTP sent successfully",
+      otp,
     });
   } catch (err) {
     console.log(err);
@@ -105,21 +107,19 @@ exports.signup = async (req, res) => {
       });
     }
     // finding recent otp
-    const recentOtp = await User.find({ email })
-      .sort({ createdAt: -1 })
-      .limit(1);
-    console.log(recentOtp);
-    //   validation of otp
-    if (recentOtp.length == 0) {
-      // otp not found
+    const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
+    console.log(response);
+    if (response.length === 0) {
+      // OTP not found for the email
       return res.status(400).json({
         success: false,
-        message: "Otp not found",
+        message: "The OTP is not valid",
       });
-    } else if (otp !== recentOtp) {
+    } else if (otp !== response[0].otp) {
+      // Invalid OTP
       return res.status(400).json({
         success: false,
-        message: "Otp is not matching",
+        message: "The OTP is not valid",
       });
     }
 
@@ -140,7 +140,7 @@ exports.signup = async (req, res) => {
       contactNumber,
       password: hashPassword,
       accountType,
-      additionalDetails: profileDetails_id,
+      additionalDetails: profileDetails._id,
       image: `https://api.dicebear.com/6.x/adventurer/svg?seed=${firstName}`,
     });
     return res.status(200).json({
