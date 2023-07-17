@@ -6,9 +6,9 @@ const { uploadImageToCloudinary } = require("../utils/imageUploader");
 exports.createSubsection = async (req, res) => {
   try {
     // f3etch thedata
-    const { sectionId, title, timeDuration, description } = req.body;
+    const { sectionId, title, description } = req.body;
     const video = req.files.videoFile;
-    if (!sectionId || !title || !timeDuration || !description || !video) {
+    if (!sectionId || !title || !description || !video) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -22,7 +22,7 @@ exports.createSubsection = async (req, res) => {
     // create subsection
     const subsectionDetails = await SubSection.create({
       title: title,
-      timeDuration: timeDuration,
+      timeDuration: `${uploadDetails.duration}`,
       description: description,
       videoUrl: uploadDetails.secure_url,
     });
@@ -42,8 +42,9 @@ exports.createSubsection = async (req, res) => {
       data: updatedSection,
     });
   } catch (err) {
+    console.error("Error creating new sub-section:", err);
     return res.status(500).json({
-      success: true,
+      success: false,
       message: "Internal Server Error",
     });
   }

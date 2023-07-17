@@ -1,5 +1,5 @@
 const Course = require("../models/Course");
-const Categoy = require("../models/Category");
+const Category = require("../models/Category");
 const User = require("../models/User");
 const {
   uploadImage,
@@ -37,9 +37,9 @@ exports.createCourse = async (req, res) => {
         message: "Instructor details not found",
       });
     }
-    console.log("Instructor details :", instructorDetails);
+    // console.log("Instructor details :", instructorDetails);
     // check Category if it is valid or not
-    const CategoryDetails = await Categoy.findById(category);
+    const CategoryDetails = await Category.findById(category);
     if (!CategoryDetails) {
       return res
         .status(404)
@@ -48,8 +48,11 @@ exports.createCourse = async (req, res) => {
     // upload images to cloudinary
     const thumbnailImage = await uploadImageToCloudinary(
       thumbnail,
-      process.env.FOLDER_NAME
+      process.env.FOLDER_NAME,
+      1000,
+      1000
     );
+    console.log(thumbnailImage);
     // create an entry for new Course
     const newCourse = await Course.create({
       courseName,
@@ -58,7 +61,7 @@ exports.createCourse = async (req, res) => {
       whatYouWillLearn: whatYouWillLearn,
       price: price,
       category: CategoryDetails._id,
-      thumbnail: thumbnailImage,
+      thumbnail: thumbnailImage.secure_url,
     });
     //add mew couse to user schema of Instructor/user
     await User.findByIdAndUpdate(
@@ -73,7 +76,7 @@ exports.createCourse = async (req, res) => {
       }
     );
     // update the Category schema
-    await CategoryDetails.findByIdAndUpdate(
+    await Category.findByIdAndUpdate(
       { _id: category },
       {
         $push: {
@@ -91,6 +94,7 @@ exports.createCourse = async (req, res) => {
       data: newCourse,
     });
   } catch (err) {
+    console.log(err.message);
     return res.status(401).json({
       success: false,
       message: err.message,

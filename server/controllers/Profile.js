@@ -1,6 +1,10 @@
 const User = require("../models/User");
 const Profile = require("../models/Profile");
-
+const {
+  uploadImage,
+  uploadImageToCloudinary,
+} = require("../utils/imageUploader");
+const { default: mongoose } = require("mongoose");
 exports.updateProfile = async (req, res) => {
   try {
     // data
@@ -9,7 +13,7 @@ exports.updateProfile = async (req, res) => {
     // userId
     const id = req.user.id;
     //validate
-    if (!contactNumber || !gender || !id) {
+    if (!contactNumber || !gender) {
       return res.status(400).json({
         success: false,
         message: "Please enter valid fields",
@@ -17,9 +21,11 @@ exports.updateProfile = async (req, res) => {
     }
     // findPRofile
     const userDetails = await User.findById(id);
-    const profileId = userDetails.additionalDetails;
+    let profileId = userDetails.additionalDetails;
     // updateProfile
-    const profileDetails = await Profile.findById({ profileId });
+
+    profileId = new mongoose.Types.ObjectId(profileId);
+    const profileDetails = await Profile.findById(profileId);
     profileDetails.dateOfBirth = dateOfBirth;
     profileDetails.gender = gender;
     profileDetails.about = about;
@@ -32,6 +38,7 @@ exports.updateProfile = async (req, res) => {
       data: profileDetails,
     });
   } catch (err) {
+    console.log(err.message);
     return res.status(500).json({
       success: false,
       message: "Internal server Error",

@@ -19,17 +19,18 @@ exports.auth = async (req, res, next) => {
     }
     // verify token
     try {
-      const decode = jwt.verify(token, process.env.JWT_SECRET);
+      const decode = await jwt.verify(token, process.env.JWT_SECRET);
       console.log(decode);
       // adding user to req
       req.user = decode;
+      // console.log(req.user.id);
     } catch (err) {
       return res.status(401).json({
         success: false,
         message: "Toekn is invalid",
       });
     }
-    mext();
+    next();
   } catch (err) {
     return res.status(401).json({
       success: false,
@@ -61,6 +62,7 @@ exports.isInstructor = async (req, res, next) => {
         message: "This is protected route for Instructor",
       });
     }
+    next();
   } catch (e) {
     return res
       .status(500)
@@ -76,6 +78,7 @@ exports.isAdmin = async (req, res, next) => {
         message: "This is protected route for Admin",
       });
     }
+    next();
   } catch (e) {
     return res
       .status(500)
